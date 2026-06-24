@@ -1,27 +1,36 @@
 {
-    'name': "custom_app_api",
+    'name': "REST API Integration",
 
-    'summary': "Short (1 phrase/line) summary of the module's purpose",
+    'summary': "REST API personalizada para integraciones externas",
 
     'description': """
-Long description of module's purpose
+REST API personalizada para integrar aplicaciones externas con Odoo.
+
+Características iniciales:
+
+- Endpoints RESTful.
+- Autenticación mediante API Key / Bearer Token.
+- Recepción de payloads JSON.
+- Mapeo y transformación de datos.
+- Creación y actualización de registros.
+- Operaciones masivas (Bulk Create).
     """,
 
-    'author': "My Company",
-    'website': "https://www.yourcompany.com",
+    'author': "Tekuno",
+    'website': "https://tekuno.mx/",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
-    'category': 'Uncategorized',
-    'version': '0.1',
-
+    'category': 'Technical',
+    'version': '19.0.1.0.0',
+    "license": "LGPL-3",
     # any module necessary for this one to work correctly
     'depends': ['base'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
     ],
@@ -29,5 +38,7 @@ Long description of module's purpose
     'demo': [
         'demo/demo.xml',
     ],
+    'installable': True,
+    'application': True,
 }
 
