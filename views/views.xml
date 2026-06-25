@@ -1,5 +1,5 @@
 <odoo>
-    <record id="view_custom_app_api_token_list" model="ir.ui.view">
+    <!-- <record id="view_custom_app_api_token_list" model="ir.ui.view">
         <field name="name">custom_app_api.token.list</field>
         <field name="model">custom_app_api.token</field>
         <field name="arch" type="xml">
@@ -19,5 +19,5 @@
     </record>
 
     <menuitem id="menu_custom_app_api_root" name="API Externa" sequence="100"/>
-    <menuitem id="menu_custom_app_api_tokens" name="Tokens de Acceso" parent="menu_custom_app_api_root" action="action_custom_app_api_token"/>
+    <menuitem id="menu_custom_app_api_tokens" name="Tokens de Acceso" parent="menu_custom_app_api_root" action="action_custom_app_api_token"/> -->
 </odoo>
