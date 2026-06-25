@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ============================================================
+             PRODUCTOS DE SUSCRIPCIÓN - MEMBRESÍAS PE2
+             Todos: type=service, recurring_invoice=True, plan=Mensual
+             list_price=0 (pendiente de definir manualmente)
+             ============================================================ -->
+
+        <!-- FAMILIAR -->
+        <record id="product_pe2_fam_pe1" model="product.template">
+            <field name="name">Familiar(Paquete Parque España 1)</field>
+            <field name="default_code">PE2_FAM_PE1</field>
+            <field name="description_sale">Membresia familiar para usuarios provenientes del Parque España 1</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <record id="product_pe2_fam_asc" model="product.template">
+            <field name="name">Familiar(Ascendencia Española)</field>
+            <field name="default_code">PE2_FAM_ASC</field>
+            <field name="description_sale">Familliar con ascendencia española</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <record id="product_pe2_fam_ben" model="product.template">
+            <field name="name">Familiar(Beneficencia Española)</field>
+            <field name="default_code">PE2_FAM_BEN</field>
+            <field name="description_sale">Familiar beneficencia</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <record id="product_pe2_fam_doc" model="product.template">
+            <field name="name">Familiar(Doctores Beneficencia Española)</field>
+            <field name="default_code">PE2_FAM_DOC</field>
+            <field name="description_sale">Familiar doctores</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <record id="product_pe2_fam_ext" model="product.template">
+            <field name="name">Familiar(Externos)</field>
+            <field name="default_code">PE2_FAM_EXT</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <!-- INDIVIDUAL -->
+        <record id="product_pe2_ind_pe1" model="product.template">
+            <field name="name">Individual(Paquete Parque España 1)</field>
+            <field name="default_code">PE2_IND_PE1</field>
+            <field name="description_sale">Membresia individual para usuarios provenientes del Parque España 1</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <record id="product_pe2_ind_asc" model="product.template">
+            <field name="name">Individual(Ascendencia Española)</field>
+            <field name="default_code">PE2_IND_ASC</field>
+            <field name="description_sale">Individual con ascendencia española</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <record id="product_pe2_ind_ben" model="product.template">
+            <field name="name">Individual(Beneficiencia Española)</field>
+            <field name="default_code">PE2_IND_BEN</field>
+            <field name="description_sale">Individual beneficencia</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <record id="product_pe2_ind_doc" model="product.template">
+            <field name="name">Individual(Doctores Beneficiencia Española)</field>
+            <field name="default_code">PE2_IND_DOC</field>
+            <field name="description_sale">Individual doctores</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <record id="product_pe2_ind_ext" model="product.template">
+            <field name="name">Individual(Externos)</field>
+            <field name="default_code">PE2_IND_EXT</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <!-- PASE MENSUAL -->
+        <record id="product_pe2_pm_fam" model="product.template">
+            <field name="name">Pase Mensual Familiar</field>
+            <field name="default_code">PE2_PM_FAM</field>
+            <field name="description_sale">Pase mensual familiar con vigencia de 1 año, sin cuota de inscripción y con mantenimiento doble</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <record id="product_pe2_pm_ind" model="product.template">
+            <field name="name">Pase Mensual Individual</field>
+            <field name="default_code">PE2_PM_IND</field>
+            <field name="description_sale">Pase mensual individual con vigencia de 1 año, sin cuota de inscripción y con mantenimiento doble</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <!-- SOLIDARIA -->
+        <record id="product_pe2_sol_pe1" model="product.template">
+            <field name="name">Solidaria(Paquete Parque España 1)</field>
+            <field name="default_code">PE2_SOL_PE1</field>
+            <field name="description_sale">Membresia solidaria para usuarios provenientes del Parque España 1</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <record id="product_pe2_sol_asc" model="product.template">
+            <field name="name">Solidaria(Ascendencia Española)</field>
+            <field name="default_code">PE2_SOL_ASC</field>
+            <field name="description_sale">Solidaria con ascendencia española</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <record id="product_pe2_sol_ben" model="product.template">
+            <field name="name">Solidaria(Beneficencia Española)</field>
+            <field name="default_code">PE2_SOL_BEN</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <record id="product_pe2_sol_doc" model="product.template">
+            <field name="name">Solidaria(Doctores Beneficencia Española)</field>
+            <field name="default_code">PE2_SOL_DOC</field>
+            <field name="description_sale">Solidaria doctores</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+        <record id="product_pe2_sol_ext" model="product.template">
+            <field name="name">Solidaria(Externos)</field>
+            <field name="default_code">PE2_SOL_EXT</field>
+            <field name="description_sale">Solidaria externos</field>
+            <field name="type">service</field>
+            <field name="recurring_invoice">1</field>
+            <field name="list_price">0.0</field>
+            <field name="sale_ok">1</field>
+        </record>
+
+    </data>
+</odoo>

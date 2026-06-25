@@ -26,13 +26,14 @@ Características iniciales:
     'version': '19.0.1.0.0',
     "license": "LGPL-3",
     # any module necessary for this one to work correctly
-    'depends': ['base'],
+    'depends': ['base', 'sale_management', 'sale_subscription'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
         # 'views/views.xml',
         # 'views/templates.xml',
+        'data/subscritions_products.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
