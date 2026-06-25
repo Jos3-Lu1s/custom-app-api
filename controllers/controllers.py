@@ -34,7 +34,7 @@ class RestApiBase(http.Controller):
         if not user_id.active:
             raise AccessError('Autenticación fallida: Usuario inactivo.')
 
-        request.update_env(user=user_id.id)
+        request.update_env(user=user_id.id) ### Ejecuta la petición como si estuviera autenticado el usuario asociado al token.
         return request.env
 
     def _prepare_response(self, status, data=None, error=None):
@@ -87,3 +87,28 @@ class RestApiBase(http.Controller):
         except Exception as e:
             _logger.error(f"Error interno en API: {str(e)}")
             return self._prepare_response(status=500, error='Error interno del servidor.')
+
+
+    ### ------------------------
+    @http.route(
+        '/api/customers',
+        type='http',
+        auth='bearer',
+        methods=['POST'],
+        csrf=False
+    )
+    def create_customer(self):
+
+        data = json.loads(request.httprequest.data)
+
+        customer = request.env['res.partner'].create({
+            'name': data.get('name'),
+            'email': data.get('email'),
+            'phone': data.get('phone'),
+        })
+
+        return request.make_json_response({
+            'id': customer.id,
+            'name': customer.name,
+            'message': 'Cliente creado correctamente'
+        }, status=201)
