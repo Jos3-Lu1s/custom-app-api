@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-
-        <!-- ============================================================
-             PRODUCTOS DE SUSCRIPCIÓN - MEMBRESÍAS PE2
-             Todos: type=service, recurring_invoice=True, plan=Mensual
-             list_price=0 (pendiente de definir manualmente)
-             ============================================================ -->
-
         <!-- FAMILIAR -->
         <record id="product_pe2_fam_pe1" model="product.template">
             <field name="name">Familiar(Paquete Parque España 1)</field>
