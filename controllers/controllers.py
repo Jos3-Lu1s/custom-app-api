@@ -125,15 +125,21 @@ class subscription_api_service(http.Controller):
                 }, status=400)
 
             result = request.env['subscription.api'].sudo().procesar_solicitud(data)
-            return request.make_json_response(result, status=200)
+            return request.make_json_response(result, status=201)
 
         except json.JSONDecodeError:
             return request.make_json_response({
                 'error': 'El cuerpo de la petición no es un JSON válido.'
             }, status=400)
+            
+        except ValidationError as e:
+            return request.make_json_response({
+                'error': str(e)
+            }, status=400)
 
         except Exception as e:
             _logger.error(f"Error procesando la solicitud de suscripción: {str(e)}")
             return request.make_json_response({
-                'error': 'Error interno procesando la solicitud de suscripción.'
+                'error': 'Error interno procesando la solicitud de suscripción.',
+                'details': str(e)
         }, status=500)

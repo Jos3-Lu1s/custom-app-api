@@ -1,0 +1,16 @@
+<!-- views/sale_order_view.xml -->
+<odoo>
+    <record id="view_sale_order_custom_button" model="ir.ui.view">
+        <field name="name">sale.order.custom.button</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_confirm']" position="after">
+                <button name="action_confirmar_y_facturar"
+                        string="Confirmar y Facturar"
+                        type="object"
+                        class="btn-primary"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

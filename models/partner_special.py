@@ -17,23 +17,20 @@ class PartnerSpecial(models.Model):
 
         for idx, item in enumerate(records_data):
             email = (item.get('email') or '').strip().lower()
-            phone = (item.get('phone') or '').strip()
-            key = (email, phone)
+            key = (email)
 
             reason = None
             if key in seen_in_batch:
-                reason = 'Duplicado dentro del mismo lote (email y teléfono repetidos).'
-            elif email and phone and self.search_count([
+                reason = 'Duplicado dentro del mismo lote (email repetidos).'
+            elif email and self.search_count([
                 ('email', '=', email),
-                ('phone', '=', phone),
             ]) > 0:
-                reason = 'Ya existe un contacto con este email y teléfono.'
+                reason = 'Ya existe un contacto con este email'
 
             if reason:
                 rejected.append({
                     'index': idx,
                     'email': item.get('email'),
-                    'phone': item.get('phone'),
                     'error': reason
                 })
                 continue
@@ -42,7 +39,6 @@ class PartnerSpecial(models.Model):
             valid_values.append({
                 'name': item.get('name'),
                 'email': item.get('email'),
-                'phone': item.get('phone'),
             })
 
         created = self.create(valid_values) if valid_values else self.browse()
