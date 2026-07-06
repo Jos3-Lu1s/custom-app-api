@@ -2,8 +2,8 @@
 import json
 import logging
 import werkzeug
-from odoo import http
-from odoo.http import request
+from odoo import http, fields
+from odoo.http import request, Response
 from odoo.exceptions import AccessError, ValidationError
 
 
@@ -143,3 +143,182 @@ class subscription_api_service(http.Controller):
                 'error': 'Error interno procesando la solicitud de suscripción.',
                 'details': str(e)
         }, status=500)
+            
+class SaleOrderApiController(http.Controller):
+    @http.route(
+        '/api/sale/order/<int:order_id>',
+        type='http',
+        auth='bearer',
+        methods=['GET'],
+        csrf=False
+    )
+    def get_sale_order(self, order_id, **kwargs):
+        month = kwargs.get('month')
+
+        # Buscar la orden
+        order = request.env['sale.order'].sudo().browse(order_id)
+
+        # Validar que existe
+        if not order.exists():
+            return Response(
+                json.dumps({
+                    'success': False,
+                    'error': f'Orden {order_id} no encontrada'
+                }),
+                content_type='application/json',
+                status=404
+            )
+
+        # Datos de la venta
+        sale_data = {
+            'id': order.id,
+            'name': order.name,
+            'state': order.state,
+            'amount_total': order.amount_total,
+            'lines': [{
+                'product': line.product_id.name,
+                'quantity': line.product_uom_qty,
+                'price_unit': line.price_unit,
+                'subtotal': line.price_subtotal,
+            } for line in order.order_line if (
+                inv.payment_state in ('not_paid', 'partial') and
+                (int(month) == inv.invoice_date_due.month if month and inv.invoice_date_due else True) 
+            )]
+        }
+
+        # Facturas relacionadas
+        invoices_data = [{
+            'id': inv.id,
+            'name': inv.name,
+            'due_date': str(inv.invoice_date_due),
+            'due_date_month': inv.invoice_date_due.month if inv.invoice_date_due else None,
+            'state': inv.state,
+            'payment_state': inv.payment_state,
+            'amount_total': inv.amount_total,
+        } for inv in order.invoice_ids if inv.payment_state in ('not_paid', 'partial')]
+
+        return Response(
+            json.dumps({
+                'success': True,
+                'sale': sale_data,
+                'invoices': invoices_data,
+            }),
+            content_type='application/json',
+            status=200
+        )
+        
+class ChangeOrderStateController(http.Controller):
+    @http.route(
+        '/api/sale/invoice/pay',
+        type='http',
+        auth='bearer',
+        methods=['POST'],
+        csrf=False
+    )
+    def pay_invoices_by_partner_month(self, **kwargs):
+    
+        # Parsear el body
+        try:
+            body = json.loads(request.httprequest.data)
+            order_id = body.get('order_id')
+            partner_id = body.get('partner_id')
+            month = body.get('month')
+            invoice_id = body.get('invoice_id')
+        except Exception:
+            return Response(
+                json.dumps({'success': False, 'error': 'Body inválido'}),
+                content_type='application/json',
+                status=400
+            )
+    
+        # Validar parámetros
+        if not partner_id or not month or not order_id:
+            return Response(
+                json.dumps({'success': False, 'error': 'partner_id, month y order_id son requeridos'}),
+                content_type='application/json',
+                status=400
+            )
+    
+        order = request.env['sale.order'].sudo().browse(order_id)
+
+        if not order.exists():
+            return Response(
+                json.dumps({'success': False, 'error': f'Orden {order_id} no encontrada'}),
+                content_type='application/json',
+                status=404
+            )
+
+        invoices = order.invoice_ids.filtered(lambda inv:
+            inv.partner_id.id == partner_id and
+            inv.state == 'posted' and
+            inv.payment_state in ('not_paid', 'partial') and
+            inv.invoice_date_due and
+            inv.invoice_date_due.month == month and
+            (inv.id == invoice_id if invoice_id else True)  # ← si viene invoice_id filtra, si no trae todas
+        )
+    
+        if not invoices:
+            return Response(
+                json.dumps({
+                    'success': False,
+                    'error': f'No hay facturas pendientes para el mes {month}/2026'
+                }),
+                content_type='application/json',
+                status=404
+            )
+    
+        # Registrar pago en cada factura
+        journal = request.env['account.journal'].sudo().search([
+            ('type', '=', 'bank'),  # o 'cash' si pagas en efectivo
+            ('company_id', '=', request.env.company.id)
+        ], limit=1)
+    
+        if not journal:
+            return Response(
+                json.dumps({'success': False, 'error': 'No se encontró un diario de pago'}),
+                content_type='application/json',
+                status=500
+            )
+    
+        pagadas = []
+        errores = []
+    
+        for inv in invoices:
+            try:
+                # Crear el pago usando el wizard nativo de Odoo
+                payment_register = request.env['account.payment.register'].sudo().with_context(
+                    active_model='account.move',
+                    active_ids=inv.ids,
+                ).create({
+                    'journal_id': journal.id,
+                    'payment_date': fields.Date.today(),
+                    'amount': inv.amount_residual,  # paga el monto pendiente
+                })
+    
+                payment_register.action_create_payments()
+    
+                pagadas.append({
+                    'invoice_id': inv.id,
+                    'name': inv.name,
+                    'amount_paid': inv.amount_residual,
+                    'status': 'pagada'
+                })
+    
+            except Exception as e:
+                errores.append({
+                    'invoice_id': inv.id,
+                    'name': inv.name,
+                    'error': str(e)
+                })
+    
+        return Response(
+            json.dumps({
+                'success': True,
+                'pagadas': pagadas,
+                'errores': errores,
+                'total_pagadas': len(pagadas),
+                'total_errores': len(errores),
+            }),
+            content_type='application/json',
+            status=200
+        )

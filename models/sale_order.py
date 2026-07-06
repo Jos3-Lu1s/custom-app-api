@@ -1,4 +1,3 @@
-# models/sale_order.py
 from odoo import models
 from odoo import api
 
@@ -7,14 +6,17 @@ class SaleOrder(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        for vals in vals_list:
+            vals['name'] = 'TEMP'
+        
         orders = super().create(vals_list)
         for order in orders:
-            savepoint = self.env.cr.savepoint()
             try:
                 order.action_confirm()
-    
+                sequence = self.env['ir.sequence'].next_by_code('sale.order')
+                order.write({'name': sequence})
             except Exception as e:
-                savepoint.rollback()  # revierte TODO: la orden, el consecutivo, la factura
+                order.unlink()
                 _logger.error("Error al procesar la orden: %s", str(e))
                 raise 
         return orders

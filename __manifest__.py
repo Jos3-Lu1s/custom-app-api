@@ -30,9 +30,6 @@ Características iniciales:
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
-        # 'views/views.xml',
-        # 'views/templates.xml',
         'data/subscritions_products.xml',
     ],
     # only loaded in demonstration mode
